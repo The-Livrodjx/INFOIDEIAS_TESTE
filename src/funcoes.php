@@ -14,19 +14,16 @@ class Funcoes
 	Ano 1700 = século 17
 
      * */
-    public function SeculoAno(int $ano): int {
-        
+    public function SeculoAno(int $ano): int
+    {
+        $seculo = ceil($ano / 100);
+        if ($ano == 1) $seculo = 1;
+        if ($ano > 2101 || $ano < 1) $seculo = -1;
+        return $seculo;
     }
 
-    
-	
-	
-	
-	
-	
-	
-	
-	/*
+
+    /*
 
     Desenvolva uma função que receba como parâmetro um número inteiro e retorne o numero primo imediatamente anterior ao número recebido
 
@@ -36,18 +33,23 @@ class Funcoes
     Número = 29 resposta = 23
 
      * */
-    public function PrimoAnterior(int $numero): int {
-        
+    public function PrimoAnterior(int $numero): int
+    {
+        $primo;
+        if ($numero < 2) $primo = 2;
+        for ($count = 2; $count < $numero; $count++) {
+            $divisores = 0;
+            for ($j = $count; $j >= 1; $j--) {
+                if (($count % $j) == 0) {
+                    $divisores++;
+                }
+            }
+            if ($divisores == 2) {
+                $primo = $count;
+            }
+        }
+        return $primo;
     }
-
-
-
-
-
-
-
-
-
 
     /*
 
@@ -65,16 +67,23 @@ class Funcoes
 	resposta = 25
 
      * */
-    public function SegundoMaior(array $arr): int {
-        
+    public function SegundoMaior(array $arr): int
+    {
+        $numeros = array();
+        global $numeros;
+        array_walk_recursive($arr, function ($item, $key) {
+            global $numeros;
+            $numeros[] = $item;
+        });
+
+        sort($numeros);
+        $segundoMaior = $numeros[sizeof($numeros) - 2];
+
+        // reset variable
+        $numeros = array();
+        return $segundoMaior;
     }
-	
-	
-	
-	
-	
-	
-	
+
 
     /*
    Desenvolva uma função que receba como parâmetro um array de números inteiros e responda com TRUE or FALSE se é possível obter uma sequencia crescente removendo apenas um elemento do array.
@@ -105,8 +114,26 @@ class Funcoes
     [3, 5, 67, 98, 3] true
 
      * */
-    
-	public function SequenciaCrescente(array $arr): boolean {
-        
+
+    public function SequenciaCrescente(array $arr): int
+    {
+        $sorted = $arr;
+        sort($sorted);
+        $arrayArr = $arr;
+        $arraySort = $sorted;
+        foreach ($arr as $key => $value) {
+            $arr = $arrayArr;
+            $sorted = $arraySort;
+            unset($arr[$key]);
+            unset($sorted[array_search($value, $arraySort)]);
+            $sorted = array_values(array_unique($sorted));
+            $arr = array_values($arr);
+            if ($arr === $sorted) {
+                return 1;
+            }
+        }
+        return 0;
     }
+    //echo sequenciaCrescente([1, 3, 2, 1]) == 1 ? 'true' : 'false'; //false
+    //echo sequenciaCrescente([1, 3, 2]) == 1 ? 'true' : 'false';
 }
